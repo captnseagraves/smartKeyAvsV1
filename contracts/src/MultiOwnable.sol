@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import {IKeyStoreServiceManager} from "./IKeyStoreServiceManager.sol";
+import {IKeyStoreTaskManager} from "./IKeyStoreTaskManager.sol";
 
 /// @dev this contract will will be deployed with a smart wallet on a canon chain. 
 ///      we need to add functionality so that an AVS can query if an address is an owner of the smart wallet
@@ -168,7 +168,7 @@ contract MultiOwnable {
         if (isOwner) { 
             return true;
         } else {
-            IKeyStoreServiceManager(KEY_STORE_AVS).isOwnerAddressRequest(address(this), account);
+            IKeyStoreTaskManager(KEY_STORE_AVS).isOwnerAddressRequest(address(this), account);
         }
     }
 
