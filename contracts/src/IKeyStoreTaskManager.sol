@@ -2,7 +2,7 @@
 pragma solidity ^0.8.9;
 
 import "@eigenlayer-middleware/src/libraries/BN254.sol";
-import "@eigenlayer-middleware/src/interface/IBLSSignatureChecker.sol";
+import "@eigenlayer-middleware/src/interfaces/IBLSSignatureChecker.sol";
 
 
 interface IKeyStoreTaskManager is IBLSSignatureChecker {
