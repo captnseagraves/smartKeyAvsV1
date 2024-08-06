@@ -12,3 +12,6 @@
 	url = https://github.com/base-org/webauthn-sol
 [submodule "lib/account-abstraction"]
 	branch = main
+[submodule "contracts/lib/eigenlayer-middleware"]
+	path = contracts/lib/eigenlayer-middleware
+	url = https://github.com/Layr-Labs/eigenlayer-middleware
