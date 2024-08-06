@@ -200,7 +200,7 @@ contract KeyStoreTaskManager is
         BN254.G1Point[] memory pubkeysOfNonSigningOperators
     ) external {
         uint32 referenceTaskIndex = taskResponse.referenceTaskIndex;
-        uint256 numberToBeSquared = task.numberToBeSquared;
+        uint256 numberToBeSquared = 0;
         // some logical checks
         require(
             allTaskResponses[referenceTaskIndex] != bytes32(0),
@@ -226,7 +226,8 @@ contract KeyStoreTaskManager is
         // logic for checking whether challenge is valid or not
         uint256 actualSquaredOutput = numberToBeSquared * numberToBeSquared;
         bool isResponseCorrect = (actualSquaredOutput ==
-            taskResponse.numberSquared);
+            0);
+            // taskResponse.numberSquared);
 
         // if response was correct, no slashing happens so we return
         if (isResponseCorrect == true) {

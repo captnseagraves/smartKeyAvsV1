@@ -183,7 +183,7 @@ contract IncredibleSquaringDeployer is Script, Utils {
         uint numStrategies = deployedStrategyArray.length;
 
         // deploy proxy admin for ability to upgrade proxy contracts
-        incredibleSquaringProxyAdmin = new ProxyAdmin();
+        incredibleSquaringProxyAdmin = new ProxyAdmin(address(this));
 
         // deploy pauser registry
         {
@@ -268,28 +268,31 @@ contract IncredibleSquaringDeployer is Script, Utils {
                 delegationManager
             );
 
-            incredibleSquaringProxyAdmin.upgrade(
-                TransparentUpgradeableProxy(payable(address(stakeRegistry))),
-                address(stakeRegistryImplementation)
-            );
+            /// @notice these implementations can deployed before the transparent proxies and can circumvent the upgrade compilatino error. 
+            ///         commenting out for now. to be removed in the future, when testing begins. 
+
+            // incredibleSquaringProxyAdmin.upgrade(
+            //     TransparentUpgradeableProxy(payable(address(stakeRegistry))),
+            //     address(stakeRegistryImplementation)
+            // );
 
             blsApkRegistryImplementation = new BLSApkRegistry(
                 registryCoordinator
             );
 
-            incredibleSquaringProxyAdmin.upgrade(
-                TransparentUpgradeableProxy(payable(address(blsApkRegistry))),
-                address(blsApkRegistryImplementation)
-            );
+            // incredibleSquaringProxyAdmin.upgrade(
+            //     TransparentUpgradeableProxy(payable(address(blsApkRegistry))),
+            //     address(blsApkRegistryImplementation)
+            // );
 
             indexRegistryImplementation = new IndexRegistry(
                 registryCoordinator
             );
 
-            incredibleSquaringProxyAdmin.upgrade(
-                TransparentUpgradeableProxy(payable(address(indexRegistry))),
-                address(indexRegistryImplementation)
-            );
+            // incredibleSquaringProxyAdmin.upgrade(
+            //     TransparentUpgradeableProxy(payable(address(indexRegistry))),
+            //     address(indexRegistryImplementation)
+            // );
         }
 
         registryCoordinatorImplementation = new regcoord.RegistryCoordinator(
@@ -339,24 +342,24 @@ contract IncredibleSquaringDeployer is Script, Utils {
                         });
                 }
             }
-            incredibleSquaringProxyAdmin.upgradeAndCall(
-                TransparentUpgradeableProxy(
-                    payable(address(registryCoordinator))
-                ),
-                address(registryCoordinatorImplementation),
-                abi.encodeWithSelector(
-                    regcoord.RegistryCoordinator.initialize.selector,
-                    // we set churnApprover and ejector to communityMultisig because we don't need them
-                    incredibleSquaringCommunityMultisig,
-                    incredibleSquaringCommunityMultisig,
-                    incredibleSquaringCommunityMultisig,
-                    incredibleSquaringPauserReg,
-                    0, // 0 initialPausedStatus means everything unpaused
-                    quorumsOperatorSetParams,
-                    quorumsMinimumStake,
-                    quorumsStrategyParams
-                )
-            );
+            // incredibleSquaringProxyAdmin.upgradeAndCall(
+            //     TransparentUpgradeableProxy(
+            //         payable(address(registryCoordinator))
+            //     ),
+            //     address(registryCoordinatorImplementation),
+            //     abi.encodeWithSelector(
+            //         regcoord.RegistryCoordinator.initialize.selector,
+            //         // we set churnApprover and ejector to communityMultisig because we don't need them
+            //         incredibleSquaringCommunityMultisig,
+            //         incredibleSquaringCommunityMultisig,
+            //         incredibleSquaringCommunityMultisig,
+            //         incredibleSquaringPauserReg,
+            //         0, // 0 initialPausedStatus means everything unpaused
+            //         quorumsOperatorSetParams,
+            //         quorumsMinimumStake,
+            //         quorumsStrategyParams
+            //     )
+            // );
         }
 
         incredibleSquaringServiceManagerImplementation = new IncredibleSquaringServiceManager(
@@ -366,12 +369,12 @@ contract IncredibleSquaringDeployer is Script, Utils {
             incredibleSquaringTaskManager
         );
         // Third, upgrade the proxy contracts to use the correct implementation contracts and initialize them.
-        incredibleSquaringProxyAdmin.upgrade(
-            TransparentUpgradeableProxy(
-                payable(address(incredibleSquaringServiceManager))
-            ),
-            address(incredibleSquaringServiceManagerImplementation)
-        );
+        // incredibleSquaringProxyAdmin.upgrade(
+        //     TransparentUpgradeableProxy(
+        //         payable(address(incredibleSquaringServiceManager))
+        //     ),
+        //     address(incredibleSquaringServiceManagerImplementation)
+        // );
 
         incredibleSquaringTaskManagerImplementation = new IncredibleSquaringTaskManager(
             registryCoordinator,
@@ -379,19 +382,19 @@ contract IncredibleSquaringDeployer is Script, Utils {
         );
 
         // Third, upgrade the proxy contracts to use the correct implementation contracts and initialize them.
-        incredibleSquaringProxyAdmin.upgradeAndCall(
-            TransparentUpgradeableProxy(
-                payable(address(incredibleSquaringTaskManager))
-            ),
-            address(incredibleSquaringTaskManagerImplementation),
-            abi.encodeWithSelector(
-                incredibleSquaringTaskManager.initialize.selector,
-                incredibleSquaringPauserReg,
-                incredibleSquaringCommunityMultisig,
-                AGGREGATOR_ADDR,
-                TASK_GENERATOR_ADDR
-            )
-        );
+        // incredibleSquaringProxyAdmin.upgradeAndCall(
+        //     TransparentUpgradeableProxy(
+        //         payable(address(incredibleSquaringTaskManager))
+        //     ),
+        //     address(incredibleSquaringTaskManagerImplementation),
+        //     abi.encodeWithSelector(
+        //         incredibleSquaringTaskManager.initialize.selector,
+        //         incredibleSquaringPauserReg,
+        //         incredibleSquaringCommunityMultisig,
+        //         AGGREGATOR_ADDR,
+        //         TASK_GENERATOR_ADDR
+        //     )
+        // );
 
         // WRITE JSON DATA
         string memory parent_object = "parent object";
