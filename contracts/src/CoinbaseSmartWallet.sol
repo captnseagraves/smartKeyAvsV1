@@ -14,7 +14,7 @@ import {MultiOwnable} from "./MultiOwnable.sol";
 
 ///TODO 
 /// 1. If msg.sender is not in multiOwner, query KeyStoreServiceManager and set keeper to watch for operator response,
-/// if msg.sender is owner then update multiOwner and call original function 
+/// if msg.sender is owner then update multiOwner and call original function  
 ///     - either user could pay for operations up front or a paymaster could pay for key management
 
 /// OR
