@@ -193,6 +193,17 @@ contract KeyStoreTaskManager is
     // NOTE: this function enables a challenger to raise and resolve a challenge.
     // TODO: require challenger to pay a bond for raising a challenge
     // TODO(samlaf): should we check that quorumNumbers is same as the one recorded in the task?
+
+    /**
+     * @notice Raises and resolves a challenge against a task response.
+     * @dev This function checks if the task response is correct and handles the challenge accordingly.
+     *      It verifies the response against the stored data and checks if the challenge is made within the allowed time window.
+     *      If the challenge is valid, it updates the state to reflect that the task was successfully challenged.
+     * @param task The task details including the smart wallet and owner addresses.
+     * @param taskResponse The response details including the reference task index and the squared number.
+     * @param taskResponseMetadata Metadata associated with the task response, including the block number and hash of non-signers.
+     * @param pubkeysOfNonSigningOperators Public keys of operators who did not sign the task response.
+     */
     function raiseAndResolveChallenge(
         Task calldata task,
         TaskResponse calldata taskResponse,
