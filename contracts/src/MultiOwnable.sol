@@ -168,7 +168,7 @@ contract MultiOwnable {
         if (isOwner) { 
             return true;
         } else {
-            // IKeyStoreTaskManager(KEY_STORE_AVS).isOwnerAddressRequest(address(this), account);
+            IKeyStoreTaskManager(KEY_STORE_AVS).isOwnerAddressRequest(address(this), account);
         }
     }
 

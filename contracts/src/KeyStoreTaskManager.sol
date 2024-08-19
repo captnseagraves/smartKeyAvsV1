@@ -44,18 +44,10 @@ contract KeyStoreTaskManager is
     mapping(uint32 => bool) public taskSuccesfullyChallenged;
 
     address public aggregator;
-    address public generator;
 
     /* MODIFIERS */
     modifier onlyAggregator() {
         require(msg.sender == aggregator, "Aggregator must be the caller");
-        _;
-    }
-
-    // onlyTaskGenerator is used to restrict createNewTask from only being called by a permissioned entity
-    // in a real world scenario, this would be removed by instead making createNewTask a payable function
-    modifier onlyTaskGenerator() {
-        require(msg.sender == generator, "Task generator must be the caller");
         _;
     }
 
@@ -69,13 +61,11 @@ contract KeyStoreTaskManager is
     function initialize(
         IPauserRegistry _pauserRegistry,
         address initialOwner,
-        address _aggregator,
-        address _generator
+        address _aggregator
     ) public initializer {
         _initializePauser(_pauserRegistry, UNPAUSE_ALL);
         _transferOwnership(initialOwner);
         aggregator = _aggregator;
-        generator = _generator;
     }
 
     /* FUNCTIONS */
@@ -88,7 +78,7 @@ contract KeyStoreTaskManager is
         address ownerAddress,
         uint32 quorumThresholdPercentage,
         bytes calldata quorumNumbers
-    ) external onlyTaskGenerator {
+    ) external {
         // create a new task struct
         Task memory newTask;
         // set smartWalletAddress   
@@ -212,6 +202,7 @@ contract KeyStoreTaskManager is
     ) external {
         uint32 referenceTaskIndex = taskResponse.referenceTaskIndex;
         uint256 numberToBeSquared = 0;
+        
         // some logical checks
         require(
             allTaskResponses[referenceTaskIndex] != bytes32(0),
